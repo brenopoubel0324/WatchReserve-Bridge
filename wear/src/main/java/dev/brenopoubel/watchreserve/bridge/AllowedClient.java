@@ -21,7 +21,7 @@ final class AllowedClient {
         StringBuilder digest = new StringBuilder();
         for (byte value : hash) digest.append(String.format(java.util.Locale.ROOT, "%02x", value & 255));
         if (!CERT.contentEquals(digest)) throw new SecurityException("Assinatura do laboratório não qualificada.");
-        if (info.getLongVersionCode() != 1 || !"0.1-readonly".equals(info.versionName)) {
+        if (info.getLongVersionCode() != 2 || !"0.2-readonly-sessions".equals(info.versionName)) {
             throw new SecurityException("Versão do laboratório não qualificada.");
         }
         return uid;

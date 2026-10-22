@@ -5,7 +5,7 @@ baseada no Shevery 14.4.0. O módulo `wear` substitui a interface de telefone po
 roláveis para relógios circulares. Consulte [a proveniência e as licenças](NOTICE-WatchReserve.md).
 
 Nesta etapa, o cliente autorizado é exclusivamente o APK de desenvolvimento
-`dev.brenopoubel.watchreserve.advancedlab`, versão 0.1-readonly, com assinatura fixada
+`dev.brenopoubel.watchreserve.advancedlab`, versão 0.2-readonly-sessions, código 2, com assinatura fixada
 em `AllowedClient.java`. Outros builds exigem qualificação e atualização desse contrato.
 O aplicativo principal continua independente da ponte.
 
@@ -81,3 +81,15 @@ Execute em 192 dp circulares, fontes 1,0 e 1,3. Capturas de revisão ficam nos d
 privados do app, sem upload. Rode também o roteiro `Test-AdvancedLab.ps1` do repositório
 principal para conferir arquivos, UID e encerramento do helper. Testes AVD não
 comprovam política de economia Samsung, recuperação após reboot ou ganho de autonomia.
+
+Com `-IncludeLocalSessionChecks`, o mesmo roteiro testa a sessão preparada com
+Wi-Fi desligado e uma queda momentânea do transporte ADB. Recupera o ZIP e confere
+UID, sessão, conteúdo e momento de início. Também mata o cliente, revoga acesso e
+derruba a ponte durante a sessão; verifica reconciliação e leitura depois de
+reiniciar a ponte pelo PC. Restaura o Wi-Fi pelo serviço e confere seu estado.
+Isso não simula ausência prolongada de transporte nem a política Samsung.
+O fixture AVD altera temporariamente `system/clockwork_wifi_setting` e usa o serviço
+de Wi-Fi; restaura inclusive uma preferência originalmente ausente. O Wear mantém
+uma [preferência própria de Wi-Fi no mediador](https://android.googlesource.com/platform/prebuilts/fullsdk/sources/android-29/+/refs/heads/main/com/android/clockwork/wifi/WearWifiMediatorSettings.java),
+por isso conferir apenas `wifi_on` ou o retorno de `svc` é insuficiente. Esse ajuste
+do roteiro não habilita um controle no APK nem demonstra equivalência na Samsung.
