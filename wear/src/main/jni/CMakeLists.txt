@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.22)
+project(watchreserve_bridge)
+set(CMAKE_CXX_STANDARD 17)
+add_compile_options(-Werror=format -fdata-sections -ffunction-sections -fno-exceptions -fno-rtti)
+find_package(cxx REQUIRED CONFIG)
+set(CORE ${CMAKE_CURRENT_SOURCE_DIR}/../../../../manager/src/main/jni)
+add_executable(libshizuku.so ${CORE}/starter.cpp ${CORE}/misc.cpp ${CORE}/selinux.cpp ${CORE}/cgroup.cpp)
+target_link_libraries(libshizuku.so log cxx::cxx)

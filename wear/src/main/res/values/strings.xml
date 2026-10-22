@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">WatchReserve Bridge</string>
+    <string name="permission_label">Acesso à ponte WatchReserve</string>
+    <string name="permission_description">Permite operações autorizadas com os privilégios do shell ADB.</string>
+</resources>

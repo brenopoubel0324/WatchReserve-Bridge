@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-feature android:name="android.hardware.type.watch" android:required="true" />
+    <permission android:name="moe.shizuku.manager.permission.API_V23"
+        android:label="@string/permission_label" android:description="@string/permission_description"
+        android:protectionLevel="dangerous" />
+    <queries><package android:name="dev.brenopoubel.watchreserve.advancedlab" /></queries>
+    <application android:allowBackup="false" android:fullBackupContent="false"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:label="@string/app_name" android:icon="@drawable/ic_bridge"
+        android:supportsRtl="true" android:extractNativeLibs="true"
+        android:theme="@android:style/Theme.DeviceDefault.NoActionBar">
+        <meta-data android:name="com.google.android.wearable.standalone" android:value="true" />
+        <activity android:name=".BridgeActivity" android:exported="true"
+            android:taskAffinity="${applicationId}">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".PermissionActivity" android:exported="true"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL"
+            android:excludeFromRecents="true" android:noHistory="true"
+            android:taskAffinity="${applicationId}.permission">
+            <intent-filter>
+                <action android:name="${applicationId}.intent.action.REQUEST_PERMISSION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <provider android:name=".BridgeProvider" android:authorities="${applicationId}.shizuku"
+            android:exported="true" android:multiprocess="false"
+            android:permission="android.permission.INTERACT_ACROSS_USERS_FULL" />
+    </application>
+</manifest>
