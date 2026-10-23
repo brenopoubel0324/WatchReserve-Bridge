@@ -283,17 +283,17 @@ public class Shizuku {
     }
 
     private static void addBinderReceivedListener(@NonNull OnBinderReceivedListener listener, boolean sticky, @Nullable Handler handler) {
-        if (sticky && binderReady) {
-            if (handler != null) {
-                handler.post(listener::onBinderReceived);
-            } else if (Looper.myLooper() == Looper.getMainLooper()) {
-                listener.onBinderReceived();
-            } else {
-                MAIN_HANDLER.post(listener::onBinderReceived);
-            }
-        }
         synchronized (RECEIVED_LISTENERS) {
             RECEIVED_LISTENERS.add(new ListenerHolder<>(listener, handler));
+            if (sticky && binderReady) {
+                if (handler != null) {
+                    handler.post(listener::onBinderReceived);
+                } else if (Looper.myLooper() == Looper.getMainLooper()) {
+                    listener.onBinderReceived();
+                } else {
+                    MAIN_HANDLER.post(listener::onBinderReceived);
+                }
+            }
         }
     }
 

@@ -82,6 +82,12 @@ privados do app, sem upload. Rode também o roteiro `Test-AdvancedLab.ps1` do re
 principal para conferir arquivos, UID e encerramento do helper. Testes AVD não
 comprovam política de economia Samsung, recuperação após reboot ou ganho de autonomia.
 
+Antes de iniciar o servidor, `BridgeProviderTest` simula um Binder vivo com SDK
+ainda incompleto e confere prontidão, callback único e encerramento por prazo.
+O fluxo real também reinicia o processo do gerenciador antes das leituras, mantendo
+o servidor shell ativo. A conexão aguarda a inicialização do SDK; `pingBinder`
+isoladamente não comprova que o serviço está pronto para anexar um helper.
+
 Com `-IncludeLocalSessionChecks`, o mesmo roteiro testa a sessão preparada com
 Wi-Fi desligado e uma queda momentânea do transporte ADB. Recupera o ZIP e confere
 UID, sessão, conteúdo e momento de início. Também mata o cliente, revoga acesso e
@@ -93,3 +99,7 @@ de Wi-Fi; restaura inclusive uma preferência originalmente ausente. O Wear mant
 uma [preferência própria de Wi-Fi no mediador](https://android.googlesource.com/platform/prebuilts/fullsdk/sources/android-29/+/refs/heads/main/com/android/clockwork/wifi/WearWifiMediatorSettings.java),
 por isso conferir apenas `wifi_on` ou o retorno de `svc` é insuficiente. Esse ajuste
 do roteiro não habilita um controle no APK nem demonstra equivalência na Samsung.
+
+O [protótipo dos diários de restauração](docs/restoration-journals.md) tem testes
+JVM e um roteiro separado com desativação/restauração apenas de um APK de ensaio
+no AVD. O núcleo ainda não está ligado a controles, UI ou bootstrap de produção.

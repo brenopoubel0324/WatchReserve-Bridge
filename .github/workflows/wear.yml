@@ -30,21 +30,25 @@ jobs:
           packages: 'platform-tools platforms;android-37.0 build-tools;37.0.0 ndk;29.0.14206865 cmake;3.22.1'
           log-accepted-android-sdk-licenses: false
       - name: Compilar e analisar
-        run: ./gradlew --no-daemon :wear:assembleDebug :wear:assembleDebugAndroidTest :wear:lintDebug
+        run: ./gradlew --no-daemon :wear:assembleDebug :wear:assembleDebugAndroidTest :wear:testDebugUnitTest :wear:lintDebug
       - name: Conferir sintaxe do roteiro AVD
         shell: pwsh
         run: |
           $tokens = $null
           $errors = $null
-          [System.Management.Automation.Language.Parser]::ParseFile(
-            "$PWD/scripts/Test-WearBridge.ps1", [ref]$tokens, [ref]$errors
-          ) | Out-Null
-          if ($errors.Count) { throw ($errors | Out-String) }
+          foreach ($script in @('Test-WearBridge.ps1', 'Test-RestorationJournals.ps1')) {
+            [System.Management.Automation.Language.Parser]::ParseFile(
+              "$PWD/scripts/$script", [ref]$tokens, [ref]$errors
+            ) | Out-Null
+            if ($errors.Count) { throw ($errors | Out-String) }
+          }
       - name: Guardar relatórios
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: lint-wear
-          path: wear/build/reports/lint-results-debug.*
+          name: relatorios-wear
+          path: |
+            wear/build/reports/lint-results-debug.*
+            wear/build/reports/tests/testDebugUnitTest/
           if-no-files-found: ignore
           retention-days: 14

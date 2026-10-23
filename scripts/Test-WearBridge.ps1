@@ -165,6 +165,8 @@ try {
     if (-not $lib -or $apkPath -notmatch '^/data/app/[A-Za-z0-9_+./=~-]+\.apk$' -or $abi -ne 'x86_64') {
         throw 'Instalação do AVD não reconhecida.'
     }
+    Invoke-Instrumentation "$bridgePackage.test/androidx.test.runner.AndroidJUnitRunner" `
+        "$bridgePackage.BridgeProviderTest" (Join-Path $OutputDirectory 'provider-readiness.txt')
     Start-TestBridge $lib $apkPath
     foreach ($scale in @('1.0','1.3')) {
         $directory = Join-Path $OutputDirectory "font-$scale"
@@ -173,6 +175,8 @@ try {
         Invoke-Instrumentation "$bridgePackage.test/androidx.test.runner.AndroidJUnitRunner" `
             "$bridgePackage.BridgeWearTest#denyOnceAlwaysRevokeAndReadOnRoundScreen" (Join-Path $directory 'authorization.txt')
         foreach ($name in @('authorization-top','authorization-actions','bridge-status')) { Copy-Screenshot $bridgePackage $name $directory }
+        # O servidor shell continua ativo; o próximo helper precisa iniciar o provider a frio.
+        Invoke-Adb @('shell','am','force-stop',$bridgePackage) | Out-Null
         Invoke-Instrumentation "$labPackage.test/androidx.test.runner.AndroidJUnitRunner" '' (Join-Path $directory 'diagnostics.txt')
         foreach ($name in @('home','report','session-prepared')) { Copy-Screenshot $labPackage $name $directory }
         Write-Output "PASS: autorização real, revogação, leitura shell e segurança; fonte $scale."

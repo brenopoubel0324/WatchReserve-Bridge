@@ -8,6 +8,7 @@ import android.util.Log;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import moe.shizuku.api.BinderContainer;
@@ -34,16 +35,17 @@ public final class BridgeProvider extends ShizukuProvider {
         String token = extras.getString(ShizukuApiConstants.USER_SERVICE_ARG_TOKEN);
         if (token == null || container == null || container.binder == null) return null;
         IBinder userService = container.binder;
-        if (Shizuku.pingBinder()) return attach(userService, token);
-
+        // Binder vivo não significa SDK inicializado. Aguardar o callback de prontidão.
         // Handler temporário: não bloquear a thread que precisa receber o Binder.
         HandlerThread thread = new HandlerThread("bridge-attach");
         thread.start();
         CountDownLatch ready = new CountDownLatch(1);
         AtomicReference<Bundle> result = new AtomicReference<>();
+        AtomicBoolean pending = new AtomicBoolean(true);
         Shizuku.OnBinderReceivedListener listener = () -> {
-            result.set(attach(userService, token));
-            ready.countDown();
+            if (!pending.compareAndSet(true, false)) return;
+            try { result.set(attach(userService, token)); }
+            finally { ready.countDown(); }
         };
         try {
             Shizuku.addBinderReceivedListenerSticky(listener, new Handler(thread.getLooper()));
@@ -52,6 +54,7 @@ public final class BridgeProvider extends ShizukuProvider {
             Thread.currentThread().interrupt();
             return null;
         } finally {
+            pending.set(false);
             Shizuku.removeBinderReceivedListener(listener);
             thread.quitSafely();
         }
