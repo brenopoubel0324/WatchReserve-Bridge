@@ -1,5 +1,7 @@
 # WatchReserve Bridge
 
+> **Planejamento, ainda não implementado:** [Contrato proposto para economia progressiva por apps e serviços](docs/watchreserve-economia-progressiva-contrato.md). Os controles de escrita permanecem desabilitados.
+
 Ponte experimental para o laboratório do [WatchReserve](https://github.com/brenopoubel0324/WatchReserve),
 baseada no Shevery 14.4.0. O módulo `wear` substitui a interface de telefone por telas
 roláveis para relógios circulares. Consulte [a proveniência e as licenças](NOTICE-WatchReserve.md).
