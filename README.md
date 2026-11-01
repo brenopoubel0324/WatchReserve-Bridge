@@ -1,6 +1,6 @@
 # WatchReserve Bridge
 
-> **Planejamento, ainda não implementado:** [Contrato proposto para economia progressiva por apps e serviços](docs/watchreserve-economia-progressiva-contrato.md). Os controles de escrita permanecem desabilitados.
+> **Planejamento, ainda não implementado:** [Contrato revisado para economia progressiva por apps e serviços](docs/watchreserve-economia-progressiva-contrato.md). Os controles de escrita permanecem desabilitados. **Não promover esta Bridge a release para usuários** antes de resolver o namespace `moe.shizuku.manager.permission.*` indicado como reservado no [README upstream](https://github.com/RikkaApps/Shizuku#license), migrar a API e validar recuperação.
 
 Ponte experimental para o laboratório do [WatchReserve](https://github.com/brenopoubel0324/WatchReserve),
 baseada no Shevery 14.4.0. O módulo `wear` substitui a interface de telefone por telas
