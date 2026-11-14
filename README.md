@@ -1,6 +1,6 @@
 # WatchReserve Bridge
 
-Ponte experimental para o laboratório do [WatchReserve](https://github.com/brenopoubel0324/WatchReserve),
+Ponte experimental para o laboratório do [WatchReserve](https://github.com/brenopoubel0324/watchreserve-app),
 baseada no Shevery 14.4.0. O módulo `wear` substitui a interface de telefone por telas
 roláveis para relógios circulares. Consulte [a proveniência e as licenças](NOTICE-WatchReserve.md).
 
